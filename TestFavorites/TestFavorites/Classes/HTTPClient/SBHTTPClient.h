@@ -17,15 +17,20 @@ extern NSString *const HTTPMethodPost;
 @interface SBHTTPClient : NSObject
 
 + (instancetype)sharedClient;
+- (RACSignal *)performRequestWithBaseURLString:(NSString *)urlString
+										method:(NSString *)method
+										  path:(NSString *)path
+									parameters:(NSDictionary *)parameters
+							  resultCollection:(Class)collection
+								   resultClass:(Class)resultClass;
 
 - (RACSignal *)performRequestWithBaseURLString:(NSString *)urlString
-								  method:(NSString *)method
+										method:(NSString *)method
 										  path:(NSString *)path
-							  parameters:(NSDictionary *)parameters
-							   cacheTime:(NSTimeInterval)expirationTime;
+									parameters:(NSDictionary *)parameters
+							  resultCollection:(Class)collection
+								   resultClass:(Class)resultClass
+									 cacheTime:(NSTimeInterval)expirationTime;
 
-- (RACSignal *)performRequestWithBaseURLString:(NSString *)urlString
-								  method:(NSString *)method
-										  path:(NSString *)path
-							  parameters:(NSDictionary *)parameters;
+
 @end

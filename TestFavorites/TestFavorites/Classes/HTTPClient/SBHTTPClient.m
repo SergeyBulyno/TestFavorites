@@ -11,6 +11,7 @@
 #import "AFNetworking.h"
 
 #import "MTLModel.h"
+#import "MTLJSONAdapter.h"
 
 //Externs
 NSString *const HTTPMethodGet = @"GET";
@@ -23,6 +24,9 @@ static NSString *const kCachePath = @"SBClientCache";
 static const NSInteger kInMemoryCacheSize = 4 * 1024 * 1024;
 static const NSInteger kOnDiskCacheSize = 100 * 1024 * 1024;
 static const NSTimeInterval kCacheInterval = 2 * 60;
+
+static const NSInteger SBClientErrorJSONParsingFailed = 900;
+static const NSInteger SBClientErrorInvalidRequest = 901;
 
 
 @interface SBHTTPClient ()
@@ -118,26 +122,40 @@ static const NSTimeInterval kCacheInterval = 2 * 60;
 }
 
 - (RACSignal *)performRequestWithBaseURLString:(NSString *)urlString
-								  method:(NSString *)method
+										method:(NSString *)method
 										  path:(NSString *)path
-							  parameters:(NSDictionary *)parameters
-							  resultCollection:(Class)collection
-								   resultClass:(Class)class
+									parameters:(NSDictionary *)parameters
+							  resultCollection:(Class)collectionClass
+								   resultClass:(Class)resultClass {
+	return [self performRequestWithBaseURLString:urlString
+										  method:method
+											path:path
+									  parameters:parameters
+								resultCollection:collectionClass
+									 resultClass:resultClass
+									   cacheTime:kCacheInterval];
+}
+
+- (RACSignal *)performRequestWithBaseURLString:(NSString *)urlString
+										method:(NSString *)method
+										  path:(NSString *)path
+									parameters:(NSDictionary *)parameters
+							  resultCollection:(Class)collectionClass
+								   resultClass:(Class)resultClass
 							   cacheTime:(NSTimeInterval)expirationTime {
 
 	return [[[[self performRequestWithBaseURLString:urlString
-									  method:method
-											  path:path
-								  parameters:parameters
-								   cacheTime:expirationTime]
-			  deliverOn:[RACScheduler scheduler]] map:^id(id response) {
-		NSLog(@"responce");
-		if (class != nil) {
-			return [self parsedResponseOfCollectionClass:class
-											 resultClass:class
-												fromJSON:response];
+											 method:method
+											   path:path
+										 parameters:parameters
+										  cacheTime:expirationTime]
+			  deliverOn:[RACScheduler scheduler]] flattenMap:^RACStream *(id response) {
+		if (resultClass != nil && [response isKindOfClass:NSDictionary.class]) {
+			return [self parsedResponseOfCollectionClass:collectionClass
+											 resultClass:resultClass
+												fromJSON:((NSDictionary *)response)[@"items"]];
 		}
-		return response;
+		return [RACSignal return:response];
 	}] deliverOn:RACScheduler.mainThreadScheduler];
 }
 
@@ -145,12 +163,10 @@ static const NSTimeInterval kCacheInterval = 2 * 60;
 					cacheTime:(NSTimeInterval)expirationTime {
 	if (!request) {
 		return [RACSignal error:[NSError errorWithDomain:SBClientErrorDomain
-													code:999
+													code:SBClientErrorInvalidRequest
 												userInfo:nil]];
 	}
-	
-//	NSURL *URL = [NSURL URLWithString:@"https://api.stackexchange.com/2.2/questions?fromdate=1471305600&todate=1471392000&order=desc&sort=activity&site=stackoverflow"];
-//	request = [NSURLRequest requestWithURL:URL];
+
 	RACSignal *fetchRequestSignal = [RACSignal createSignal:^(id<RACSubscriber> subscriber) {
 		NSURLSessionDataTask *dataTask =
 		[self.manager dataTaskWithRequest:request
@@ -158,7 +174,9 @@ static const NSTimeInterval kCacheInterval = 2 * 60;
 							NSDictionary *errorDictionary = responseObject[@"error_id"];
 							if (error || errorDictionary) {
 								if (errorDictionary){
-									NSString *errorDescription = [NSString stringWithFormat:@"%@: %@",errorDictionary[@"error_name"], errorDictionary[@"error_message"]];
+									NSString *errorDescription = [NSString stringWithFormat:@"%@: %@",
+																  errorDictionary[@"error_name"],
+																  errorDictionary[@"error_message"]];
 									error = [NSError errorWithDomain:SBClientErrorDomain
 																code:[errorDictionary[@"error_id"] integerValue]
 															userInfo:@{NSLocalizedDescriptionKey:errorDescription}];
@@ -182,16 +200,75 @@ static const NSTimeInterval kCacheInterval = 2 * 60;
 	return [[fetchRequestSignal publish] autoconnect] ;
 }
 
-- (RACSignal *)parsedResponseOfCollectionClass:(Class)containerClass
-								  resultClass:(Class)resultClass
-									 fromJSON:(id)responseObject {
+#pragma mark - Parsing
+
+- (RACSignal *)parsedResponseOfCollectionClass:(Class)collectionClass
+								   resultClass:(Class)resultClass
+									  fromJSON:(id)JSON {
 	if (resultClass) {
-		NSParameterAssert([resultClass isSubclassOfClass:MTLModel.class]);
+		BOOL isResultSubclussOfMTL = [resultClass isSubclassOfClass:MTLModel.class];
+		NSParameterAssert(isResultSubclussOfMTL);
+		if (!isResultSubclussOfMTL) {
+			return [RACSignal return:JSON];
+		}
 	}
 
 	return [RACSignal createSignal:^ id (id<RACSubscriber> subscriber) {
+		id (^parseJSONDictionary)(NSDictionary *) = ^ id (NSDictionary *JSONDictionary) {
+			if ([JSONDictionary isKindOfClass:[NSNull class]]  || !JSONDictionary.count) {
+				return nil;
+			}
+			NSError *error = nil;
+			MTLModel *parsedObject = [MTLJSONAdapter modelOfClass:resultClass
+											   fromJSONDictionary:JSONDictionary
+															error:&error];
+			if (parsedObject == nil && error) {
+				[subscriber sendError:error];
+			}
+
+			NSAssert([parsedObject isKindOfClass:MTLModel.class], @"Parsed model object is not an MTLModel: %@", parsedObject);
+			return parsedObject ?: nil;
+		};
+
+		id (^iterateArray)(NSArray *) = ^ id (NSArray *JSONArray) {
+			NSMutableArray *array = [NSMutableArray array];
+
+			for (NSDictionary *JSONDictionary in JSONArray) {
+				if (![JSONDictionary isKindOfClass:NSDictionary.class]) {
+					NSString *failureReason = [NSString stringWithFormat:@"Invalid JSON array element: %@", JSONDictionary];
+					[subscriber sendError:[self parsingErrorWithFailureReason:failureReason]];
+				}
+				id parsedObject = parseJSONDictionary(JSONDictionary);
+				if (parsedObject) [array addObject:parsedObject];
+			}
+			return array.copy;
+		};
+
+		if (collectionClass == NSArray.class) {
+			if ([JSON isKindOfClass:NSArray.class]) {
+				[subscriber sendNext:iterateArray(JSON)];
+				[subscriber sendCompleted];
+			} else {
+				NSString *failureReason = [NSString stringWithFormat:@"Expected array element, received: %@", JSON];
+				[subscriber sendError:[self parsingErrorWithFailureReason:failureReason]];
+			}
+		}
 		return nil;
 	}];
 }
+
+- (NSError *)parsingErrorWithFailureReason:(NSString *)failurereason {
+	NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
+	userInfo[NSLocalizedDescriptionKey] = @"Could not parse the service response.";
+
+	if (failurereason != nil) {
+		userInfo[NSLocalizedFailureReasonErrorKey] = failurereason;
+	}
+
+	return [NSError errorWithDomain:SBClientErrorDomain
+							   code:SBClientErrorJSONParsingFailed
+						   userInfo:userInfo];
+}
+
 
 @end
