@@ -21,6 +21,7 @@
 		A51D01781D6DA98C005F8C99 /* SBQuestionCellItem.m in Sources */ = {isa = PBXBuildFile; fileRef = A51D01771D6DA98C005F8C99 /* SBQuestionCellItem.m */; };
 		A51D017E1D6E470D005F8C99 /* SBHTTPClient.m in Sources */ = {isa = PBXBuildFile; fileRef = A51D017D1D6E470D005F8C99 /* SBHTTPClient.m */; };
 		A5B5E4FA1D71688000FC7C74 /* SBStackexchangeHTTPClient+SOExtention.m in Sources */ = {isa = PBXBuildFile; fileRef = A5B5E4F91D71688000FC7C74 /* SBStackexchangeHTTPClient+SOExtention.m */; };
+		A5B5E4FE1D71C66900FC7C74 /* SBQuestionModel.m in Sources */ = {isa = PBXBuildFile; fileRef = A5B5E4FD1D71C66900FC7C74 /* SBQuestionModel.m */; };
 		A5F240371D7160FC00FF56C4 /* SBStackexchangeHTTPClient.m in Sources */ = {isa = PBXBuildFile; fileRef = A5F240361D7160FC00FF56C4 /* SBStackexchangeHTTPClient.m */; };
 /* End PBXBuildFile section */
 
@@ -55,6 +56,9 @@
 		A51D017D1D6E470D005F8C99 /* SBHTTPClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBHTTPClient.m; sourceTree = "<group>"; };
 		A5B5E4F81D71688000FC7C74 /* SBStackexchangeHTTPClient+SOExtention.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SBStackexchangeHTTPClient+SOExtention.h"; sourceTree = "<group>"; };
 		A5B5E4F91D71688000FC7C74 /* SBStackexchangeHTTPClient+SOExtention.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "SBStackexchangeHTTPClient+SOExtention.m"; sourceTree = "<group>"; };
+		A5B5E4FC1D71C66900FC7C74 /* SBQuestionModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SBQuestionModel.h; sourceTree = "<group>"; };
+		A5B5E4FD1D71C66900FC7C74 /* SBQuestionModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBQuestionModel.m; sourceTree = "<group>"; };
+		A5B5E4FF1D71CAD700FC7C74 /* SBModels.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SBModels.h; sourceTree = "<group>"; };
 		A5F240351D7160FC00FF56C4 /* SBStackexchangeHTTPClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SBStackexchangeHTTPClient.h; sourceTree = "<group>"; };
 		A5F240361D7160FC00FF56C4 /* SBStackexchangeHTTPClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBStackexchangeHTTPClient.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -195,6 +199,7 @@
 		A51D017B1D6E46A0005F8C99 /* HTTPClient */ = {
 			isa = PBXGroup;
 			children = (
+				A5B5E4FB1D71C5E400FC7C74 /* Models */,
 				A51D017C1D6E470D005F8C99 /* SBHTTPClient.h */,
 				A51D017D1D6E470D005F8C99 /* SBHTTPClient.m */,
 				A5F240351D7160FC00FF56C4 /* SBStackexchangeHTTPClient.h */,
@@ -203,6 +208,16 @@
 				A5B5E4F91D71688000FC7C74 /* SBStackexchangeHTTPClient+SOExtention.m */,
 			);
 			path = HTTPClient;
+			sourceTree = "<group>";
+		};
+		A5B5E4FB1D71C5E400FC7C74 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				A5B5E4FC1D71C66900FC7C74 /* SBQuestionModel.h */,
+				A5B5E4FD1D71C66900FC7C74 /* SBQuestionModel.m */,
+				A5B5E4FF1D71CAD700FC7C74 /* SBModels.h */,
+			);
+			path = Models;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -308,6 +323,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A5B5E4FE1D71C66900FC7C74 /* SBQuestionModel.m in Sources */,
 				A51D01721D6D703A005F8C99 /* SBQuestionCell.m in Sources */,
 				A5B5E4FA1D71688000FC7C74 /* SBStackexchangeHTTPClient+SOExtention.m in Sources */,
 				A51D01641D6CE145005F8C99 /* SBBaseViewController.m in Sources */,

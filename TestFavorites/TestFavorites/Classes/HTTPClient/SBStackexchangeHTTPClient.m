@@ -98,11 +98,13 @@ static NSString *const SBSEClientErrorDomain = @"SEClientErrorDomain";
 	if (sort != SBRequestSortingUnknown) {
 		parameters[@"sort"] = [self sortStringFromSort:sort];
 	}
-
 	return [self.httpClient performRequestWithBaseURLString:self.baseUrlStringWithVersion
-											  method:HTTPMethodGet
-												path:@"questions"
-										  parameters:[parameters copy]];
+													 method:HTTPMethodGet
+													   path:@"questions"
+												 parameters:[parameters copy]
+										   resultCollection:NSArray.class
+												resultClass:SBQuestionModel.class
+												  cacheTime:0];
 }
 
 - (NSString *)orderStringFromOrder:(SBRequestSortingOrder)order {

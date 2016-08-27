@@ -10,6 +10,7 @@
 
 #import <ReactiveCocoa/ReactiveCocoa.h>
 #import <ReactiveCocoa/RACEXTScope.h>
+#import "SBModels.h"
 
 typedef NS_ENUM(NSInteger, SBRequestSortingOrder) {
 	SBRequestSortingOrderUnknown = 0,

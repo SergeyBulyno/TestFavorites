@@ -89,9 +89,12 @@
 }
 
 - (void)loadStackOwf {
-	[[[SBStackexchangeHTTPClient sharedClient] fetchSOQuestionsLastDays:1
+	[[[[SBStackexchangeHTTPClient sharedClient] fetchSOQuestionsLastDays:1
 																  order:SBRequestSortingOrderDesc
-																   sort:SBRequestSortingActivity] subscribeNext:^(id x) {
+																   sort:SBRequestSortingActivity] doError:^(NSError *error) {
+		NSLog(@"%@", error);
+	}]
+	 subscribeNext:^(id x) {
 		NSLog(@"Fetched:%@", x);
 	}];
 }
