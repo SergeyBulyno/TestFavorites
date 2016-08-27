@@ -14,6 +14,14 @@
 		A51D015D1D6CB30E005F8C99 /* SBQuestionsTabController.m in Sources */ = {isa = PBXBuildFile; fileRef = A51D015C1D6CB30E005F8C99 /* SBQuestionsTabController.m */; };
 		A51D01641D6CE145005F8C99 /* SBBaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A51D01631D6CE145005F8C99 /* SBBaseViewController.m */; };
 		A51D01681D6CE168005F8C99 /* SBQuestionListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A51D01671D6CE168005F8C99 /* SBQuestionListViewController.m */; };
+		A51D016B1D6CE68B005F8C99 /* SBQuestionListViewModel.m in Sources */ = {isa = PBXBuildFile; fileRef = A51D016A1D6CE68B005F8C99 /* SBQuestionListViewModel.m */; };
+		A51D016E1D6CE6DE005F8C99 /* SBBaseViewModel.m in Sources */ = {isa = PBXBuildFile; fileRef = A51D016D1D6CE6DE005F8C99 /* SBBaseViewModel.m */; };
+		A51D01721D6D703A005F8C99 /* SBQuestionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A51D01711D6D703A005F8C99 /* SBQuestionCell.m */; };
+		A51D01751D6D8B35005F8C99 /* SBVCHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = A51D01741D6D8B35005F8C99 /* SBVCHelper.m */; };
+		A51D01781D6DA98C005F8C99 /* SBQuestionCellItem.m in Sources */ = {isa = PBXBuildFile; fileRef = A51D01771D6DA98C005F8C99 /* SBQuestionCellItem.m */; };
+		A51D017E1D6E470D005F8C99 /* SBHTTPClient.m in Sources */ = {isa = PBXBuildFile; fileRef = A51D017D1D6E470D005F8C99 /* SBHTTPClient.m */; };
+		A5B5E4FA1D71688000FC7C74 /* SBStackexchangeHTTPClient+SOExtention.m in Sources */ = {isa = PBXBuildFile; fileRef = A5B5E4F91D71688000FC7C74 /* SBStackexchangeHTTPClient+SOExtention.m */; };
+		A5F240371D7160FC00FF56C4 /* SBStackexchangeHTTPClient.m in Sources */ = {isa = PBXBuildFile; fileRef = A5F240361D7160FC00FF56C4 /* SBStackexchangeHTTPClient.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -32,6 +40,23 @@
 		A51D01631D6CE145005F8C99 /* SBBaseViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBBaseViewController.m; sourceTree = "<group>"; };
 		A51D01661D6CE168005F8C99 /* SBQuestionListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SBQuestionListViewController.h; sourceTree = "<group>"; };
 		A51D01671D6CE168005F8C99 /* SBQuestionListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBQuestionListViewController.m; sourceTree = "<group>"; };
+		A51D01691D6CE68B005F8C99 /* SBQuestionListViewModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SBQuestionListViewModel.h; sourceTree = "<group>"; };
+		A51D016A1D6CE68B005F8C99 /* SBQuestionListViewModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBQuestionListViewModel.m; sourceTree = "<group>"; };
+		A51D016C1D6CE6DE005F8C99 /* SBBaseViewModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SBBaseViewModel.h; sourceTree = "<group>"; };
+		A51D016D1D6CE6DE005F8C99 /* SBBaseViewModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBBaseViewModel.m; sourceTree = "<group>"; };
+		A51D01701D6D703A005F8C99 /* SBQuestionCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SBQuestionCell.h; sourceTree = "<group>"; };
+		A51D01711D6D703A005F8C99 /* SBQuestionCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBQuestionCell.m; sourceTree = "<group>"; };
+		A51D01731D6D8B35005F8C99 /* SBVCHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SBVCHelper.h; sourceTree = "<group>"; };
+		A51D01741D6D8B35005F8C99 /* SBVCHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBVCHelper.m; sourceTree = "<group>"; };
+		A51D01761D6DA98C005F8C99 /* SBQuestionCellItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SBQuestionCellItem.h; sourceTree = "<group>"; };
+		A51D01771D6DA98C005F8C99 /* SBQuestionCellItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBQuestionCellItem.m; sourceTree = "<group>"; };
+		A51D017A1D6E005B005F8C99 /* SBViewWithItem.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SBViewWithItem.h; sourceTree = "<group>"; };
+		A51D017C1D6E470D005F8C99 /* SBHTTPClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SBHTTPClient.h; sourceTree = "<group>"; };
+		A51D017D1D6E470D005F8C99 /* SBHTTPClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBHTTPClient.m; sourceTree = "<group>"; };
+		A5B5E4F81D71688000FC7C74 /* SBStackexchangeHTTPClient+SOExtention.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SBStackexchangeHTTPClient+SOExtention.h"; sourceTree = "<group>"; };
+		A5B5E4F91D71688000FC7C74 /* SBStackexchangeHTTPClient+SOExtention.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "SBStackexchangeHTTPClient+SOExtention.m"; sourceTree = "<group>"; };
+		A5F240351D7160FC00FF56C4 /* SBStackexchangeHTTPClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SBStackexchangeHTTPClient.h; sourceTree = "<group>"; };
+		A5F240361D7160FC00FF56C4 /* SBStackexchangeHTTPClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBStackexchangeHTTPClient.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -105,6 +130,7 @@
 		A51D01591D6CB30E005F8C99 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				A51D017B1D6E46A0005F8C99 /* HTTPClient */,
 				A51D01611D6CE145005F8C99 /* Common */,
 				A51D015A1D6CB30E005F8C99 /* QuestionsScreen */,
 			);
@@ -124,8 +150,13 @@
 		A51D01611D6CE145005F8C99 /* Common */ = {
 			isa = PBXGroup;
 			children = (
+				A51D01791D6DFF99005F8C99 /* Protocols */,
 				A51D01621D6CE145005F8C99 /* SBBaseViewController.h */,
 				A51D01631D6CE145005F8C99 /* SBBaseViewController.m */,
+				A51D016C1D6CE6DE005F8C99 /* SBBaseViewModel.h */,
+				A51D016D1D6CE6DE005F8C99 /* SBBaseViewModel.m */,
+				A51D01731D6D8B35005F8C99 /* SBVCHelper.h */,
+				A51D01741D6D8B35005F8C99 /* SBVCHelper.m */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -133,10 +164,45 @@
 		A51D01651D6CE168005F8C99 /* QuestionsTab */ = {
 			isa = PBXGroup;
 			children = (
+				A51D016F1D6D6FEE005F8C99 /* Cells */,
 				A51D01661D6CE168005F8C99 /* SBQuestionListViewController.h */,
 				A51D01671D6CE168005F8C99 /* SBQuestionListViewController.m */,
+				A51D01691D6CE68B005F8C99 /* SBQuestionListViewModel.h */,
+				A51D016A1D6CE68B005F8C99 /* SBQuestionListViewModel.m */,
 			);
 			path = QuestionsTab;
+			sourceTree = "<group>";
+		};
+		A51D016F1D6D6FEE005F8C99 /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				A51D01701D6D703A005F8C99 /* SBQuestionCell.h */,
+				A51D01711D6D703A005F8C99 /* SBQuestionCell.m */,
+				A51D01761D6DA98C005F8C99 /* SBQuestionCellItem.h */,
+				A51D01771D6DA98C005F8C99 /* SBQuestionCellItem.m */,
+			);
+			path = Cells;
+			sourceTree = "<group>";
+		};
+		A51D01791D6DFF99005F8C99 /* Protocols */ = {
+			isa = PBXGroup;
+			children = (
+				A51D017A1D6E005B005F8C99 /* SBViewWithItem.h */,
+			);
+			path = Protocols;
+			sourceTree = "<group>";
+		};
+		A51D017B1D6E46A0005F8C99 /* HTTPClient */ = {
+			isa = PBXGroup;
+			children = (
+				A51D017C1D6E470D005F8C99 /* SBHTTPClient.h */,
+				A51D017D1D6E470D005F8C99 /* SBHTTPClient.m */,
+				A5F240351D7160FC00FF56C4 /* SBStackexchangeHTTPClient.h */,
+				A5F240361D7160FC00FF56C4 /* SBStackexchangeHTTPClient.m */,
+				A5B5E4F81D71688000FC7C74 /* SBStackexchangeHTTPClient+SOExtention.h */,
+				A5B5E4F91D71688000FC7C74 /* SBStackexchangeHTTPClient+SOExtention.m */,
+			);
+			path = HTTPClient;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -242,11 +308,19 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A51D01721D6D703A005F8C99 /* SBQuestionCell.m in Sources */,
+				A5B5E4FA1D71688000FC7C74 /* SBStackexchangeHTTPClient+SOExtention.m in Sources */,
 				A51D01641D6CE145005F8C99 /* SBBaseViewController.m in Sources */,
+				A51D016B1D6CE68B005F8C99 /* SBQuestionListViewModel.m in Sources */,
+				A5F240371D7160FC00FF56C4 /* SBStackexchangeHTTPClient.m in Sources */,
 				A51D01471D6CA718005F8C99 /* AppDelegate.m in Sources */,
 				A51D01441D6CA718005F8C99 /* main.m in Sources */,
+				A51D01751D6D8B35005F8C99 /* SBVCHelper.m in Sources */,
 				A51D01681D6CE168005F8C99 /* SBQuestionListViewController.m in Sources */,
+				A51D017E1D6E470D005F8C99 /* SBHTTPClient.m in Sources */,
+				A51D016E1D6CE6DE005F8C99 /* SBBaseViewModel.m in Sources */,
 				A51D015D1D6CB30E005F8C99 /* SBQuestionsTabController.m in Sources */,
+				A51D01781D6DA98C005F8C99 /* SBQuestionCellItem.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -342,7 +416,9 @@
 			baseConfigurationReference = 530C230F17853AE97C23A347 /* Pods.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = "Brand Assets";
 				INFOPLIST_FILE = TestFavorites/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = SB.TestFavorites;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -354,7 +430,9 @@
 			baseConfigurationReference = 32D8D85455123B86014B7E8C /* Pods.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = "Brand Assets";
 				INFOPLIST_FILE = TestFavorites/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = SB.TestFavorites;
 				PRODUCT_NAME = "$(TARGET_NAME)";
