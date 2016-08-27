@@ -25,6 +25,7 @@
 	self.viewController = [SBQuestionsTabController new];
 	self.window.rootViewController = self.viewController;
 	[self.window makeKeyAndVisible];
+	[self customizeAppearance];
 	return YES;
 }
 
@@ -48,6 +49,12 @@
 
 - (void)applicationWillTerminate:(UIApplication *)application {
 	// Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+}
+
+
+- (void)customizeAppearance {
+	[[UITabBar appearance] setBarStyle:UIBarStyleBlack];
+	[[UITableViewCell appearance] setBackgroundColor:[UIColor clearColor]];
 }
 
 @end
