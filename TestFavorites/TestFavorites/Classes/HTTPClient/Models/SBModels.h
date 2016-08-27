@@ -1,13 +1,15 @@
 //
-//  Models.h
+//  SBModels.h
 //  TestFavorites
 //
-//  Created by Sergey on 8/27/16.
+//  Created by Sergey Bulyno on 8/27/16.
 //  Copyright © 2016 Sergey Bulyno. All rights reserved.
 //
 
-#ifndef Models_h
-#define Models_h
+#ifndef SBModels_h
+#define SBModels_h
+
+#import "SBQuestionModel.h"
 
 
-#endif /* Models_h */
+#endif /* SBModels_h */
