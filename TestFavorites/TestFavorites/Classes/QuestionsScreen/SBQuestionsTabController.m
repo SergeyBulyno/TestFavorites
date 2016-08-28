@@ -19,6 +19,7 @@
 
 - (void)viewWillAppear:(BOOL)animated {
 	[super viewWillAppear:animated];
+	self.navigationItem.title = NSLocalizedString(@"Questions", nil);
 	if (self.viewControllers.count == 0) {
 		SBQuestionListViewModel *questionsVM = [[SBQuestionListViewModel alloc] initWithType:SBQuestionTypeFetched];
 		SBQuestionListViewController *questionsVC = [[SBQuestionListViewController alloc] initWithViewModel:questionsVM];

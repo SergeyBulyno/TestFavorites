@@ -16,33 +16,24 @@
 //Views
 #import "SBQuestionCell.h"
 
-//Models
-#import "SBQuestionCellItem.h"
-
-//Protocols
-#import "SBViewWithItem.h"
-
-#import "SBStackexchangeHTTPClient+SOExtention.h"
 
 @interface SBQuestionListViewController () <UITableViewDelegate,  UITableViewDataSource>
 
 @property (strong, nonatomic) SBQuestionListViewModel *viewModel;
 @property (strong, nonatomic) UITableView *tableView;
 
-@property (strong, nonatomic) NSNumberFormatter *countFormatter;
-@property (strong, nonatomic) NSDateFormatter *dateFormatter;
+@property (strong, nonatomic) NSArray *otherRightNavBarItems;
 
-@property (strong, nonatomic) NSArray *items;
 @end
 
 @implementation SBQuestionListViewController
 
+@dynamic viewModel;
 #pragma mark - Controller Lifecycle
 
 - (instancetype)initWithViewModel:(id)viewModel {
-	self = [super init];
+	self = [super initWithViewModel:viewModel];
 	if (self) {
-		_viewModel = viewModel;
 		[self setupTabbarItem];
 	}
 	return self;
@@ -52,8 +43,10 @@
 	[super viewDidLoad];
 	[self setupSubviews];
 	[self setupConstraints];
-	[self setupFormatters];
-	self.items = [self generateItems];
+	[self setupObservers];
+	if ([self.viewModel refreshAvailable]) {
+		[self setupEditButtonsObserver];
+	}
 }
 
 - (void)didReceiveMemoryWarning {
@@ -70,7 +63,29 @@
 - (void)setupSubviews {
 	self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"bg_pattern"]];
 	[self setupTableView];
-	[self loadStackOwf];
+}
+
+- (void)setupEditButtonsObserver {
+	@weakify(self);
+	[[self rac_signalForSelector:@selector(viewWillAppear:)] subscribeNext:^(id _) {
+		@strongify(self);
+		UIBarButtonItem *button = [[UIBarButtonItem alloc]
+								   initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh
+								   target:self
+								   action:@selector(refresh:)];
+
+		self.otherRightNavBarItems = self.tabBarController.navigationItem.rightBarButtonItems;
+		self.tabBarController.navigationItem.rightBarButtonItems = [@[button]arrayByAddingObjectsFromArray:self.otherRightNavBarItems];
+	}];
+
+	[[self rac_signalForSelector:@selector(viewWillDisappear:)] subscribeNext:^(id _) {
+		@strongify(self);
+		self.tabBarController.navigationItem.rightBarButtonItems = self.otherRightNavBarItems;
+	}];
+}
+
+- (void)refresh:(UIButton *)refreshButton {
+	[self.viewModel updateData];
 }
 
 - (void)setupTableView {
@@ -88,17 +103,6 @@
 	self.tableView.contentInset = [self tableViewContentInset];
 }
 
-- (void)loadStackOwf {
-	[[[[SBStackexchangeHTTPClient sharedClient] fetchSOQuestionsLastDays:1
-																  order:SBRequestSortingOrderDesc
-																   sort:SBRequestSortingActivity] doError:^(NSError *error) {
-		NSLog(@"%@", error);
-	}]
-	 subscribeNext:^(id x) {
-		NSLog(@"Fetched:%@", x);
-	}];
-}
-
 - (void)registerTableViewCells {
 	Class celClass = SBQuestionCell.class;
 	[self.tableView registerClass:celClass
@@ -112,32 +116,19 @@
 	}];
 }
 
-- (void)setupFormatters {
-	_countFormatter = [[NSNumberFormatter alloc] init];
-	[_countFormatter setNumberStyle:NSNumberFormatterDecimalStyle];
-
-	_dateFormatter = [[NSDateFormatter alloc] init];
-	[_dateFormatter setFormatterBehavior:NSDateFormatterBehavior10_4];
-	[_dateFormatter setDateStyle:NSDateFormatterShortStyle];
-	[_dateFormatter setTimeStyle:NSDateFormatterShortStyle];
+- (void)setupObservers {
+	@weakify(self);
+	[self.viewModel.updatedContentSignal subscribeNext:^(id x) {
+		@strongify(self);
+		[self.tableView reloadData];
+	}];
 }
 
 - (UIEdgeInsets)tableViewContentInset {
-	return UIEdgeInsetsMake(0.0, 0.0, [SBVCHelper tabbarOffset], 0.0);
-}
-
-- (NSArray <SBQuestionCellItem *> *)generateItems {
-	NSMutableArray *returnArray = [NSMutableArray array];
-	for (NSInteger index = 0; index < 10; index++) {
-		SBQuestionCellItem *item = [SBQuestionCellItem new];
-		item.ownerName = [NSString stringWithFormat:@"owner : %@", @(index)];
-		//		item.ownerName = [NSString stringWithFormat:@"owner dsadfdsfasdfasdfasldfhgalskjdhgflajksdhgflkasjhdflkjahslkdfjhalksdjfhlkasjhfdlkaj : %@", @(index)];
-		item.viewCount = [NSString stringWithFormat:@"Count: %@", [self.countFormatter stringFromNumber:@(5 + index)]];
-		item.score = [NSString stringWithFormat:@"Score: %@", [self.countFormatter stringFromNumber:@(25 + index)] ];
-		item.lastDate = [self.dateFormatter stringFromDate:[NSDate date]];
-		[returnArray addObject:item];
-	}
-	return [returnArray copy];
+	return UIEdgeInsetsMake(self.navigationController.navigationBar.frame.size.height,
+							0.0,
+							[SBVCHelper tabbarOffset],
+							0.0);
 }
 
 #pragma mark - <UITableViewDelegate>
@@ -147,22 +138,24 @@
 	UITableViewCell <SBViewWithItem> *cell =
 	[tableView dequeueReusableCellWithIdentifier:NSStringFromClass(SBQuestionCell.class)
 									forIndexPath:indexPath];
-	[cell setItem:self.items[indexPath.row]];
+
+	[cell setItem:[self.viewModel itemAtIndexPath:indexPath]];
 	return cell;
 }
 
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+- (CGFloat)tableView:(UITableView *)tableView
+heightForRowAtIndexPath:(NSIndexPath *)indexPath {
 	return 50.0;
 }
 
 #pragma marl - <UITableViewDataSource>
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-	return 1;
+	return [self.viewModel numberOfSections];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-	return self.items.count;
+	return [self.viewModel numberOfItemsInSection:section];
 }
 
 
