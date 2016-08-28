@@ -8,19 +8,22 @@
 
 #import <UIKit/UIKit.h>
 #import "SBBaseViewModel.h"
+#import "SBTableViewDataSource.h"
 
 typedef NS_ENUM(NSInteger, SBQuestionType) {
 	SBQuestionTypeFetched,
 	SBQuestionTypeFavorite,
 };
 
-@interface SBQuestionListViewModel: SBBaseViewModel
+@interface SBQuestionListViewModel: SBBaseViewModel <SBTableViewDataSource>
 
 - (id)init __attribute__((unavailable("Use initWithType: initializers instead.")));
 
 - (instancetype)initWithType:(SBQuestionType)type;
+- (void)updateData;
 
 - (NSString *)tabbarTitle;
 - (UIImage *)tabbarImage;
+- (BOOL)refreshAvailable;
 
 @end
