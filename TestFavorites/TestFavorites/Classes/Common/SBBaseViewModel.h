@@ -7,7 +7,31 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <ReactiveCocoa/ReactiveCocoa.h>
+#import <ReactiveCocoa/RACEXTScope.h>
+#import "RVMViewModel.h"
 
-@interface SBBaseViewModel : UIViewController
+typedef NS_ENUM(NSInteger, SBViewModelState) {
+	SBViewModelStateLoading,
+	SBViewModelStateNormal,
+	SBViewModelStateError,
+	SBViewModelStateCustom,
+};
+
+
+@interface SBBaseViewModel : RVMViewModel  {
+@protected
+	RACCommand *_fetchDataCommand;
+	RACSignal *_updatedContentSignal;
+}
+
+- (instancetype)initWithState:(SBViewModelState)state;
+
+@property (strong, nonatomic, readonly) RACSignal *stateChangedSignal;
+@property (strong, nonatomic, readonly) RACSignal *updatedContentSignal;
+
+- (RACSignal *)fetchDataSignal;
+- (RACCommand *)fetchDataCommand;
+
 
 @end
