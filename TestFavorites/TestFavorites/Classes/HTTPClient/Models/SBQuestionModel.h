@@ -15,8 +15,8 @@
 //В реальном проекте стоило бы создать отдельный объект для owner;
 //и парсить полный объект.
 @property (copy, nonatomic) NSString *ownerDisplayName;
-@property (copy, nonatomic) NSNumber *viewCount;
-@property (assign, nonatomic) NSNumber *score;
-@property (assign, nonatomic) NSDate *lastActivityDate;
+@property (strong, nonatomic) NSNumber *viewCount;
+@property (strong, nonatomic) NSNumber *score;
+@property (strong, nonatomic) NSDate *lastActivityDate;
 
 @end

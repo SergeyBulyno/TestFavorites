@@ -29,6 +29,7 @@
 		172826EB52C363782C1638AE /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		32D8D85455123B86014B7E8C /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		530C230F17853AE97C23A347 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
+		A514C2F11D72DF1F008A13D5 /* SBTableViewDataSource.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SBTableViewDataSource.h; sourceTree = "<group>"; };
 		A51D013F1D6CA718005F8C99 /* TestFavorites.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TestFavorites.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A51D01431D6CA718005F8C99 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		A51D01451D6CA718005F8C99 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -192,6 +193,7 @@
 			isa = PBXGroup;
 			children = (
 				A51D017A1D6E005B005F8C99 /* SBViewWithItem.h */,
+				A514C2F11D72DF1F008A13D5 /* SBTableViewDataSource.h */,
 			);
 			path = Protocols;
 			sourceTree = "<group>";
