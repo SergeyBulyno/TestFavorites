@@ -12,7 +12,8 @@
 #pragma mark - MTLJSONSerializing
 
 + (NSDictionary *)JSONKeyPathsByPropertyKey {
-	return @{@"ownerDisplayName": @"owner.display_name",
+	return @{@"questionID": @"question_id",
+			 @"ownerDisplayName": @"owner.display_name",
 			 @"viewCount": @"view_count",
 			 @"score": @"score",
 			 @"lastActivityDate": @"last_activity_date"
