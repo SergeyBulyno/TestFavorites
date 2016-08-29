@@ -84,6 +84,7 @@
 				break;
 			case SBViewModelStateError:
 				self.errorView.hidden = NO;
+				self.errorView.text = self.viewModel.errorItem;
 				[self subviewsHidden:YES];
 				self.activityIndicator.hidden = YES;
 				[self.activityIndicator stopAnimating];
@@ -106,7 +107,9 @@
 - (void)setupErrorView {
 	UILabel *errorViewLabel = [UILabel new];
 	errorViewLabel.font = [UIFont boldSystemFontOfSize:16];
-	errorViewLabel.textColor = [UIColor blackColor];
+	errorViewLabel.textColor = [UIColor grayColor];
+	errorViewLabel.textAlignment = NSTextAlignmentCenter;
+	errorViewLabel.numberOfLines = 0;
 
 	_errorView = errorViewLabel;
 	self.errorView.hidden = YES;

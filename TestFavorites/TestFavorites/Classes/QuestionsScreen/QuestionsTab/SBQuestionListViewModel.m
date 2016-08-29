@@ -53,6 +53,7 @@
 	self.favoritesStorage = [WGFavoritesStorage sharedStorage];
 	[self setupFormatters];
 	[self setupObservers];
+	self.errorItem = NSLocalizedString(@"Error: questions loading failed", nil);
 }
 
 - (void)setupObservers {

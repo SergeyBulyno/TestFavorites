@@ -30,6 +30,8 @@ typedef NS_ENUM(NSInteger, SBViewModelState) {
 @property (strong, nonatomic, readonly) RACSignal *stateChangedSignal;
 @property (strong, nonatomic, readonly) RACSignal *updatedContentSignal;
 
+@property (copy, nonatomic) NSString *errorItem;
+
 - (RACSignal *)fetchDataSignal;
 - (RACCommand *)fetchDataCommand;
 

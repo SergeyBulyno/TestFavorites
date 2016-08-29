@@ -181,7 +181,9 @@ static const NSInteger SBClientErrorInvalidRequest = 901;
 																code:[errorDictionary[@"error_id"] integerValue]
 															userInfo:@{NSLocalizedDescriptionKey:errorDescription}];
 								}
-								if (error.domain != NSURLErrorDomain && error.code == NSURLErrorCancelled) {
+
+								BOOL cancelError = (error.domain != NSURLErrorDomain && error.code == NSURLErrorCancelled);
+								if (error && !cancelError) {
 									[subscriber sendError:error];
 								} else {
 									[subscriber sendCompleted];
