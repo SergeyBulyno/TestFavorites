@@ -11,6 +11,11 @@
 //Models
 #import "SBQuestionCellItem.h"
 
+//Helpers
+#import "ObjectiveSugar.h"
+
+#import "WGFavoritesStorage.h"
+
 //Extentions
 #import "SBStackexchangeHTTPClient+SOExtention.h"
 
@@ -19,10 +24,12 @@
 @property (assign, nonatomic) SBQuestionType vmType;
 
 @property (strong, nonatomic) NSArray <NSArray <SBQuestionCellItem *> *> *items;
+@property (strong, nonatomic) NSDictionary <NSNumber *, SBQuestionModel *> *questions;
 
 @property (strong, nonatomic) NSNumberFormatter *countFormatter;
 @property (strong, nonatomic) NSDateFormatter *dateFormatter;
 
+@property (strong, nonatomic) WGFavoritesStorage *favoritesStorage;
 @end
 
 @implementation SBQuestionListViewModel
@@ -43,9 +50,12 @@
 #pragma mark - Default Setup
 
 - (void)setupDefault {
+	self.favoritesStorage = [WGFavoritesStorage sharedStorage];
 	[self setupFormatters];
+	[self setupObservers];
+}
 
-
+- (void)setupObservers {
 	@weakify(self);
 	RACSignal *launchExecutingSignal = [RACSignal merge:@[self.didBecomeActiveSignal, [self rac_signalForSelector:@selector(updateData)]]];
 
@@ -66,7 +76,6 @@
 	[_dateFormatter setDateStyle:NSDateFormatterShortStyle];
 	[_dateFormatter setTimeStyle:NSDateFormatterShortStyle];
 }
-
 
 #pragma mark - Controller Customizing
 
@@ -98,34 +107,56 @@
 #pragma mark - Subclassing
 
 - (RACSignal *)fetchDataSignal {
+	RACSignal *fetchQuestionItems;
+	if (self.vmType == SBQuestionTypeFetched) {
+		fetchQuestionItems = [[[SBStackexchangeHTTPClient sharedClient] fetchSOQuestionsLastDays:1
+																						   order:SBRequestSortingOrderDesc
+																							sort:SBRequestSortingActivity] doError:^(NSError *error) {
+			NSLog(@"Error : %@", error);
+		}];
+	} else {
+		fetchQuestionItems = [RACSignal return:[self.favoritesStorage.favorites allValues]];
+	}
+
 	@weakify(self);
-	RACSignal *fetchAndGenerateItems = [[[[[[SBStackexchangeHTTPClient sharedClient] fetchSOQuestionsLastDays:1
-																 order:SBRequestSortingOrderDesc
-																  sort:SBRequestSortingActivity] doError:^(NSError *error) {
-		NSLog(@"Error : %@", error);
-	}] deliverOn:[RACScheduler scheduler]] map:^id(NSArray <SBQuestionModel *> *questions) {
-		NSLog(@"Count %@", @(questions.count));
+	RACSignal *fetchAndGenerateItems = [[[fetchQuestionItems deliverOn:[RACScheduler scheduler]] map:^id(NSArray <SBQuestionModel *> *questions) {
 		return [self itemsFromQuestions:questions];
 	}] deliverOn:[RACScheduler mainThreadScheduler]];
 
-	return [fetchAndGenerateItems doNext:^(NSArray *items) {
+	return [fetchAndGenerateItems doNext:^(RACTuple *data) {
 		@strongify(self);
-		self.items = items;
+		self.items = data.second;
+		self.questions = data.first;
 	}];
+
 }
 
 #pragma mark - Prepare Data
 
-- (NSArray <SBQuestionCellItem *> *)itemsFromQuestions:(NSArray <SBQuestionModel *> *)questions {
+- (RACTuple *)itemsFromQuestions:(NSArray <SBQuestionModel *> *)questions {
 	NSMutableArray *resultArray = [NSMutableArray arrayWithCapacity:questions.count];
+	NSMutableDictionary *questionsDictionary = [NSMutableDictionary dictionaryWithCapacity:questions.count];
 	for (SBQuestionModel *question in questions) {
-		SBQuestionCellItem *cellItem = [self cellItemFromQuestion:question];
-		if (cellItem) {
-			[resultArray addObject:cellItem];
+		if ([self shouldDisplayQuestion:question]) {
+			SBQuestionCellItem *cellItem = [self cellItemFromQuestion:question];
+			if (cellItem) {
+				[resultArray addObject:cellItem];
+			}
+			questionsDictionary[question.questionID] = question;
 		}
 	}
-	return @[[resultArray copy]];
+	return RACTuplePack([questionsDictionary copy], @[[resultArray copy]]);
 }
+
+- (BOOL)shouldDisplayQuestion:(SBQuestionModel *)model {
+	if (self.vmType == SBQuestionTypeFetched) {
+		return ![self.favoritesStorage containsID:model.questionID];
+	} else if(self.vmType == SBQuestionTypeFavorite) {
+		return [self.favoritesStorage containsID:model.questionID];
+	}
+	return NO;
+}
+
 
 - (SBQuestionCellItem *)cellItemFromQuestion:(SBQuestionModel *)question {
 	SBQuestionCellItem *item = [SBQuestionCellItem new];
@@ -133,9 +164,50 @@
 	item.viewCount = [NSString stringWithFormat:NSLocalizedString(@"Count: %@", nil), [self.countFormatter stringFromNumber:question.viewCount]];
 	item.score = [NSString stringWithFormat:NSLocalizedString(@"Score: %@", nil), [self.countFormatter stringFromNumber:question.score]];
 	item.lastDate = [self.dateFormatter stringFromDate:question.lastActivityDate];
+	item.questionID = question.questionID;
+	item.inFavorites = [self.favoritesStorage containsID:question.questionID];
+	[[RACObserve(item, inFavorites) skip:1] subscribeNext:^(id x) {
+		[self changeFavoritesStateForItem:item];
+	}];
 	return item;
 }
 
+#pragma mark - Change Favorites
+
+- (void)changeFavoritesStateForItem:(SBQuestionCellItem *)questionItem {
+	SBQuestionModel *questionModel = self.questions[questionItem.questionID];
+	if (questionModel) {
+		if ([self shouldDisplayQuestion:questionModel]) {
+			[self excludeItem:questionItem];
+		}
+		if (questionItem.inFavorites) {
+			[self.favoritesStorage addItem:questionModel
+									 forID:questionModel.questionID];
+		} else {
+			[self.favoritesStorage removeItemForID:questionModel.questionID];
+		}
+	}
+}
+
+//можно сделать анимированное удаление
+- (void)excludeItem:(SBQuestionCellItem *)questionItem {
+	@weakify(self);
+	[[[[[RACSignal return:[self.items copy]] deliverOn:[RACScheduler scheduler]] map:^id( NSArray <NSArray <SBQuestionCellItem *> *> *sectionItems) {
+		NSMutableArray *filtredSectionItems = [NSMutableArray array];
+		for (NSArray <SBQuestionCellItem *> *items in sectionItems) {
+			NSMutableArray *resultItems = [items mutableCopy];
+			[resultItems removeObject:questionItem];
+			if (resultItems.count > 0) {
+				[filtredSectionItems addObject:[resultItems copy]];
+			}
+		}
+		return filtredSectionItems;
+	}]
+	  deliverOn:[RACScheduler mainThreadScheduler]] subscribeNext:^(NSArray <NSArray <SBQuestionCellItem *> *> *items) {
+		@strongify(self);
+		self.items = items;
+	}];
+}
 
 #pragma mark - <SBTableViewDataSource>
 
@@ -159,8 +231,5 @@
 	}
 	return nil;
 }
-
-
-
 
 @end

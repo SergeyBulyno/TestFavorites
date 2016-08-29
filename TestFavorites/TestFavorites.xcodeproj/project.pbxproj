@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		18A44896A5C72D23DEFC327E /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 172826EB52C363782C1638AE /* libPods.a */; };
+		A514C2F51D740689008A13D5 /* WGFavoritesStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = A514C2F41D740689008A13D5 /* WGFavoritesStorage.m */; };
 		A51D01441D6CA718005F8C99 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = A51D01431D6CA718005F8C99 /* main.m */; };
 		A51D01471D6CA718005F8C99 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = A51D01461D6CA718005F8C99 /* AppDelegate.m */; };
 		A51D014F1D6CA718005F8C99 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A51D014E1D6CA718005F8C99 /* Assets.xcassets */; };
@@ -30,6 +31,8 @@
 		32D8D85455123B86014B7E8C /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		530C230F17853AE97C23A347 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 		A514C2F11D72DF1F008A13D5 /* SBTableViewDataSource.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SBTableViewDataSource.h; sourceTree = "<group>"; };
+		A514C2F31D740689008A13D5 /* WGFavoritesStorage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WGFavoritesStorage.h; sourceTree = "<group>"; };
+		A514C2F41D740689008A13D5 /* WGFavoritesStorage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WGFavoritesStorage.m; sourceTree = "<group>"; };
 		A51D013F1D6CA718005F8C99 /* TestFavorites.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TestFavorites.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A51D01431D6CA718005F8C99 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		A51D01451D6CA718005F8C99 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -93,6 +96,15 @@
 			name = Pods;
 			sourceTree = "<group>";
 		};
+		A514C2F21D740664008A13D5 /* Storage */ = {
+			isa = PBXGroup;
+			children = (
+				A514C2F31D740689008A13D5 /* WGFavoritesStorage.h */,
+				A514C2F41D740689008A13D5 /* WGFavoritesStorage.m */,
+			);
+			path = Storage;
+			sourceTree = "<group>";
+		};
 		A51D01361D6CA718005F8C99 = {
 			isa = PBXGroup;
 			children = (
@@ -135,6 +147,7 @@
 		A51D01591D6CB30E005F8C99 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				A514C2F21D740664008A13D5 /* Storage */,
 				A51D017B1D6E46A0005F8C99 /* HTTPClient */,
 				A51D01611D6CE145005F8C99 /* Common */,
 				A51D015A1D6CB30E005F8C99 /* QuestionsScreen */,
@@ -334,6 +347,7 @@
 				A51D01471D6CA718005F8C99 /* AppDelegate.m in Sources */,
 				A51D01441D6CA718005F8C99 /* main.m in Sources */,
 				A51D01751D6D8B35005F8C99 /* SBVCHelper.m in Sources */,
+				A514C2F51D740689008A13D5 /* WGFavoritesStorage.m in Sources */,
 				A51D01681D6CE168005F8C99 /* SBQuestionListViewController.m in Sources */,
 				A51D017E1D6E470D005F8C99 /* SBHTTPClient.m in Sources */,
 				A51D016E1D6CE6DE005F8C99 /* SBBaseViewModel.m in Sources */,
