@@ -10,9 +10,12 @@
 
 @interface SBQuestionCellItem : NSObject
 
+@property (strong, nonatomic) NSNumber *questionID;
 @property (copy, nonatomic) NSString *ownerName;
 @property (copy, nonatomic) NSString *viewCount;
 @property (copy, nonatomic) NSString *score;
 @property (copy, nonatomic) NSString *lastDate;
+
+@property (assign, nonatomic) NSInteger inFavorites;
 
 @end

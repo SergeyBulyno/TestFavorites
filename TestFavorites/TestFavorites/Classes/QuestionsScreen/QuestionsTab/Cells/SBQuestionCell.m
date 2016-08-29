@@ -20,6 +20,8 @@
 
 @property (strong, nonatomic) UISwitch *switchButton;
 
+
+@property (strong, nonatomic) SBQuestionCellItem *cellItem;
 @end
 
 @implementation SBQuestionCell
@@ -52,6 +54,9 @@
 	self.switchButton = [UISwitch new];
 	[self.switchButton setOnTintColor:[UIColor grayColor]];
 	[self.contentView addSubview:self.switchButton];
+	[self.switchButton  addTarget:self
+						   action:@selector(switchChanged:)
+				 forControlEvents:UIControlEventValueChanged];
 }
 
 - (void)setupConstraints {
@@ -89,10 +94,12 @@
 }
 
 - (void)setItem:(SBQuestionCellItem *)item {
+	_cellItem = item;
 	self.ownerLabel.text = item.ownerName;
 	self.viewCountLabel.text = item.viewCount;
 	self.scoreLabel.text = item.score;
 	self.lastDateLabel.text = item.lastDate;
+	self.switchButton.on = item.inFavorites;
 }
 
 - (UILabel *)setupAndReturnLabel {
@@ -101,6 +108,10 @@
 	label.font = [UIFont systemFontOfSize:14];
 	[self.contentView addSubview:label];
 	return label;
+}
+
+- (void)switchChanged:(UISwitch *)sender {
+	self.cellItem.inFavorites = sender.on;
 }
 
 @end
